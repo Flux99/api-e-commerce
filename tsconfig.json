@@ -3,7 +3,8 @@
   "compilerOptions": {
     "target": "es5",                          
     "module": "commonjs",                    
-    "lib": ["es6"],                     
+    "lib": ["es6"],   
+    // "types": ["node"],                  
     "allowJs": true,
     "outDir": "build",                          
     "rootDir": "src",
@@ -15,5 +16,8 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "types": [
+    "jest" // or "mocha" for Mocha
+  ]
 }

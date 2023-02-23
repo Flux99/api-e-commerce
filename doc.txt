@@ -1,0 +1,3 @@
+Using typescript because type safety
+bcrypt for password hashing
+typeorm for database orm
