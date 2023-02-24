@@ -10,8 +10,8 @@ export class Catalog {
   @Column()
   name: string;
 
-  @OneToOne(() => User, user => user.catalog)
-  seller: User;
+  // @OneToOne(() => User, user => user.id)
+  // seller: number;
 
   @OneToMany(() => Product, product => product.catalog)
   products: Product[];

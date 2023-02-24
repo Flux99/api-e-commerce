@@ -16,8 +16,12 @@ export class User {
   @Column({ default: false })
   isSeller: boolean;
 
-  @OneToOne(() => Catalog, catalog => catalog.seller)
-  catalog: Catalog;
+  // @OneToOne(() => Catalog, catalog => catalog.id)
+  // catalog: number;
+
+  @OneToOne(() => Catalog)
+  @JoinColumn()
+    catalog: Catalog
 }
 
 

@@ -14,7 +14,9 @@ export class Order {
   @Column()
   sellerId: number;
 
-  @ManyToMany(() => Product)
-  @JoinTable()
+  // @OneToMany(() => Product)
+  // @JoinTable()
+  // products: Product[];
+  @OneToMany(() => Product, product => product.order)
   products: Product[];
 }

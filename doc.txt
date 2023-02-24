@@ -1,3 +1,6 @@
 Using typescript because type safety
 bcrypt for password hashing
 typeorm for database orm
+Database used is MySQL
+Jest for testing
+Joi for middleware validation
