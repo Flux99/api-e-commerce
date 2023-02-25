@@ -1,68 +1,40 @@
 
 import request from 'supertest';
 import app from '../index';
-// import { connection} from "../database";
-import { getConnection, getConnectionManager } from "typeorm"
 
 let sellerToken:string 
 let buyerToken:string 
-// beforeAll(async () => {
-//   const connectionManager = getConnectionManager()
-//   const connection = connectionManager.create({
-//       "type": "mysql",
-//       "host": "localhost",
-//       "port": 3306,
-//       "username": "newroot",
-//       "password": "password",
-//       "database": "test01",
-//       "entities": ["../src/entities/*.ts"],
-//       "logging": false,
-//       "synchronize": true
-//   })
-//   await connection.connect()
-// })
-
-// afterEach(async () => {
-
-//   // Fetch all the entities
-//   const entities = getConnection().entityMetadatas;
-
-//   for (const entity of entities) {
-//       const repository = getConnection().getRepository(entity.name); // Get repository
-//       await repository.clear(); // Clear each entity table's content
-//   }
-// });
 
 describe('AUTH APIS TEST CASES ', () => {
-// describe('REGISTER APIS TEST CASES ', () => {
-//   it('should register a seller with unique username', async() => {
-//     const body = {
-//       username: "abc",
-//       password: "abc@123",
-//       isSeller: true
-//     }
-//     const response = await request(app).post('/auth/register')
-//     .send(body);
-//     console.log("response of register user", response.body);
+describe('REGISTER APIS TEST CASES ', () => {
+  it('should register a seller with unique username', async() => {
+    const body = {
+      username: "abc",
+      password: "abc@123",
+      isSeller: true
+    }
+    const response = await request(app).post('/auth/register')
+    .send(body);
+    console.log("response of register user", response.body);
     
-//      expect(response.body.message).toBe("User Created");
+     expect(response.body.message).toBe("User Created");
 
-//   });
-//   it('it should not register a seller with same username, throw Already Exist error', async() => {
-//     const body = {
-//       username: "abc",
-//       password: "abc@123",
-//       isSeller: true
-//     }
-//     const response = await request(app).post('/auth/register')
-//     .send(body);
-//     console.log("response of not register user", response.body);
+  });
+  it('it should not register a seller with same username, throw Already Exist error', async() => {
+    const body = {
+      username: "abc",
+      password: "abc@123",
+      isSeller: true
+    }
+    const response = await request(app).post('/auth/register')
+    .send(body);
+    console.log("response of not register user", response.body);
     
-//      expect(response.body.message).toBe("User Already exist!");
-//      expect(response.status).toBe(400);
+     expect(response.body.message).toBe("User Already exist!");
+     expect(response.status).toBe(400);
 
-//   });
-// });
+  });
+});
 
 
   describe('LOG IN APIS TEST CASES ', () => {
@@ -134,11 +106,11 @@ expect(response.status).toBe(401);
       catalog_name: "new01",
       products: [
         {
-          name:"product5",
+          name:"product15",
           price: 10
         },
         {
-          name:"product6",
+          name:"product16",
           price: 12
         },
       ]
@@ -171,28 +143,18 @@ it('should return a list of sellers', async () => {
   const response = await request(app).get('/buyer/list-of-sellers')
   .set('Authorization', `Bearer ${buyerToken}`);
   expect(response.status).toBe(200);
-  // expect(response.body).toHaveLength(2); // Assuming there are two sellers in the database
-  // expect(response.body[0]).toHaveProperty('id');
-  // expect(response.body[0]).toHaveProperty('name');
-  // ... other assertions on the response body ...
 });
 it('should NOT return a list of sellers without token', async () => {
   const response = await request(app).get('/buyer/list-of-sellers');
   // .set('Authorization', `Bearer ${buyerToken}`);
   console.log("should NOT return a seller without token", response.body, response.status);
-  
-  // expect(response.status).toBe(401);
-  // expect(response.body).toHaveLength(2); // Assuming there are two sellers in the database
-  // expect(response.body[0]).toHaveProperty('id');
-  // expect(response.body[0]).toHaveProperty('name');
-  // ... other assertions on the response body ...
 });
 
 it('should create an order', async () => {
   const body = {
     seller_id:2,
     products: [
-      {id: 1},{id: 2}
+      {id: 17},{id: 16}
     ]
 }
   const response = await request(app).post('/buyer/create-order')
@@ -201,10 +163,6 @@ it('should create an order', async () => {
   console.log("response of a create order", response.status, response.body);
   
   expect(response.status).toBe(200);
-  // expect(response.body).toHaveLength(2); // Assuming there are two sellers in the database
-  // expect(response.body[0]).toHaveProperty('id');
-  // expect(response.body[0]).toHaveProperty('name');
-  // ... other assertions on the response body ...
 }); // seller/orders
 
 
@@ -221,10 +179,6 @@ it('should NOT create an order, without token', async () => {
   console.log("response of a NOT token", response.status,response.body );
   
   expect(response.status).toBe(401);
-  // expect(response.body).toHaveLength(2); // Assuming there are two sellers in the database
-  // expect(response.body[0]).toHaveProperty('id');
-  // expect(response.body[0]).toHaveProperty('name');
-  // ... other assertions on the response body ...
 });
 
 it('should get order of a seller', async () => {
@@ -236,26 +190,3 @@ it('should get order of a seller', async () => {
   expect(response.status).toBe(200);
 });
 });
-
-
-
-// describe('GET /buyer/list-of-sellers', () => {
-//   it('should Not return a list of sellers', async () => {
-//     const response = await request(app).get('/buyer/list-of-sellers');
-
-//     expect(response.status).toBe(404);
-//     // expect(response.body).toHaveLength(2); // Assuming there are two sellers in the database
-//     // expect(response.body[0]).toHaveProperty('id');
-//     // expect(response.body[0]).toHaveProperty('name');
-//     // ... other assertions on the response body ...
-//   });
-//   it('should create a catalog for sellers', async () => {
-//     const response = await request(app).get('/seller/create-catalog');
-
-//     expect(response.status).toBe(404);
-//     // expect(response.body).toHaveLength(2); // Assuming there are two sellers in the database
-//     // expect(response.body[0]).toHaveProperty('id');
-//     // expect(response.body[0]).toHaveProperty('name');
-//     // ... other assertions on the response body ...
-//   });
-// });

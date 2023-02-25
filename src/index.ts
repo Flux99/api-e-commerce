@@ -10,13 +10,6 @@ import {createOrder,createCatalogSchema, sellerCatalog, userLoginSchema, userReg
 const saltRounds = 10;
 import {signToken,verifyToken, verifyTokenMiddleware} from "./middleware/jwt-middleware";
 import { Order } from "./entity/Order";
-// Hash the password
-// const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-// Compare a password to a hash
-// const isPasswordCorrect = await bcrypt.compare(password, hashedPassword);
-
-// create and setup express app
 const app = express()
 app.use(express.json())
 connection
@@ -82,8 +75,10 @@ app.post("/auth/login", async  (req: Request, res: Response, next: NextFunction)
       next(error);
 }
   });
+
+// --------------------------------------------------------------------------------- BUYER APIS---------------------------------------------------------------------------------
+// GET list of buyers
 app.get("/buyer/list-of-sellers", verifyTokenMiddleware, async  (req: Request, res: Response, next: NextFunction)=>{
-    // here we will have logic to return all users
     console.log("running get users api...");
     
     try {
@@ -92,12 +87,6 @@ app.get("/buyer/list-of-sellers", verifyTokenMiddleware, async  (req: Request, r
       .select(["users.username","users.id","users.catalog"])
       .where("isSeller = true")
       .getMany();
-      // .find({
-      //   where: { 
-      //     isSeller: true
-      //   }
-      // });
-      // data
       console.log("seller data",data);
     if (data.length > 0) {
       return res.status(200).send({message: "Seller Found", data: data})
@@ -115,8 +104,6 @@ app.get("/buyer/list-of-sellers", verifyTokenMiddleware, async  (req: Request, r
 
 // For buyers find a catalog  
 app.get("/buyer/seller-catalog", verifyTokenMiddleware, async (req: Request, res: Response, next: NextFunction) =>{
-  // here we will have logic to return user by id
-
   try {
     const result = await sellerCatalog.validateAsync(req.body);
     const seller = await (await connection)
@@ -143,15 +130,6 @@ app.get("/buyer/seller-catalog", verifyTokenMiddleware, async (req: Request, res
   } else {
     return res.status(404).send({message:"No Seller Found"});
   }
-    // Fetch the catalog of the specified seller from the database
-    // const catalogRepository = getRepository(Catalog);
-    // const catalog = await catalogRepository.findOne({
-    //   where: { seller: req.params.seller_id },
-    //   relations: ['products'],
-    // });
-
-    // // Return the catalog as a JSON response
-    // res.json(catalog);
   } catch (error:any) {
     console.log("error in seller/seller-catalog api", error);
     if (error.isJoi) {
@@ -220,6 +198,7 @@ app.post("/buyer/create-order/", verifyTokenMiddleware, async (req: Request, res
       next(error);
 }
 })
+// --------------------------------------------------------------------------------- SELLER APIS---------------------------------------------------------------------------------
 
 app.post("/seller/create-catalog", verifyTokenMiddleware, async (req: Request, res: Response, next: NextFunction)=>{ // verifyTokenMiddleware
   // here we will have logic to save a user
@@ -227,14 +206,14 @@ app.post("/seller/create-catalog", verifyTokenMiddleware, async (req: Request, r
     console.log("req body of create-catalog",req.body);
     const result = await createCatalogSchema.validateAsync(req.body);
 
-    // const { catalog_name, products } = req.body;
+    const user = await (await connection).getRepository(User)
+    .createQueryBuilder("users")
+    .select(["users.username","users.id","users.catalog","users.isSeller"])
+    .where('id = :id', { id: result.user.user_id })
+    .andWhere('isSeller = :isSeller', { isSeller: true })
+    .getOne();
 
-    // Check if user is a seller
-    const user = await (await connection)
-    .getRepository(User).findOne({
-      where: {id: result.user.user_id,isSeller: true,},
-      // relations:['catalog']
-    });
+    
     if (user && user.isSeller) {
       
       const catalogdata= new Catalog();
