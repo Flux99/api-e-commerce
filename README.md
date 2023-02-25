@@ -1,5 +1,9 @@
 # E-Commerce Backend apis
 
+
+Assignment Question doc: https://docs.google.com/document/d/1Rl_xTLP49ZPjd4h4Y0KrZgs217aB2KUhw7aCMIL-f60/edit
+
+
 ## Description
 
 #### This a e-commerce backend.Where there is a Seller and Buyer.Seller can register and create a catalog of products.where as Buyer can see the list of seller,can request for a seller catalog and create an order for those products.
