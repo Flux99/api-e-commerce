@@ -71,3 +71,4 @@ api doc link: https://marvelous-zuccutto-de0b6d.netlify.app/
 ![Screenshot_1](https://github.com/Flux99/College-Database-Management/blob/master/Screenshots/Screenshot_1.jpeg?raw=true)
 
 ![Screenshot_1](https://github.com/Flux99/College-Database-Management/blob/master/Screenshots/Screenshot_2.jpeg?raw=true)
+

@@ -1,28 +1,26 @@
-import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne } from 'typeorm';
-import { Catalog } from './Catalog';
-
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+} from "typeorm"
+import { Profile } from "./Profile"
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column({unique:true})
-  username: string;
+  id: number
 
   @Column()
-  password: string;
+  name: string
 
-  @Column({ default: false })
-  isSeller: boolean;
+  @Column()
+  username: string
 
-  // @OneToOne(() => Catalog, catalog => catalog.id)
-  // catalog: number;
-
-  @OneToOne(() => Catalog)
+  @Column()
+  age: number
+  @OneToOne(() => Profile)
   @JoinColumn()
-    catalog: Catalog
+  profile: Profile
 }
-
-
-

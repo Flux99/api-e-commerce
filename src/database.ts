@@ -1,10 +1,10 @@
-import { createConnection } from 'typeorm';
-import { Catalog } from './entity/Catalog';
-import { Order } from './entity/Order';
-import { Product } from './entity/Product';
+import { DataSource,DataSourceOptions } from 'typeorm';
+// import { Catalog } from './entity/Catalog';
+// import { Order } from './entity/Order';
+// import { Product } from './entity/Profile';
 import { User } from './entity/User';
-import * as secret from "./secret/config.json";
-export const connection = createConnection({
+import * as secret from "./secret/db-config.json";
+const connectionPromise:DataSourceOptions = {
   type: "mysql",
   host: secret.host,
   port: secret.port,
@@ -13,4 +13,6 @@ export const connection = createConnection({
   database: secret.database,
   synchronize: true,
   entities: [__dirname + '/entity/*.ts'] // [User,Product,Catalog,Order]// 
-});
+};
+const Datasource = new DataSource(connectionPromise);
+export default Datasource;

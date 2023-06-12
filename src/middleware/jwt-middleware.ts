@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import * as secret from "./../secret/config.json";
+import * as secret from "../secret/db-config.json";
 
 export const signToken = (payload: any, secret: string, options: jwt.SignOptions = {}): string => {
     return jwt.sign(payload, secret, options);
