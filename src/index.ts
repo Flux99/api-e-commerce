@@ -8,8 +8,46 @@ import { Profile } from './entity/Profile';
 import {createOrder,createCatalogSchema, sellerCatalog, userLoginSchema, userRegisterSchema} from "./middleware/middleware-validation";
 const saltRounds = 10;
 import {signToken,verifyToken, verifyTokenMiddleware} from "./middleware/jwt-middleware";
-const app = express()
-app.use(express.json())
+const app = express();
+app.use(express.json());
+const winston = require('winston')
+import ecsFormat from '@elastic/ecs-winston-format';
+
+
+// const winston = require('winston');
+require('winston-logstash');
+
+const LogstashTransport = require("winston-logstash/lib/winston-logstash-latest");
+
+// const logger = winston.createLogger({
+//   transports: [
+//     new LogstashTransport({
+//       port: 5000,
+//       // node_name: "my node name",
+//       host: "hostname",
+//     }),
+//   ],
+// });
+
+// logger.info("Hello world!");
+     
+
+const logger = winston.createLogger({
+  format: ecsFormat(), 
+  transports: [
+    // new winston.transports.Console(),
+    new winston.transports.File({ filename: '/home/hostname/Desktop/ts_sql/api-e-commerce/nodejs.json' })
+  ]
+})
+
+// logger.info('start')
+// logger.error('oops there is a problem', { err: new Error('boom') })
+// const logger = winston.createLogger({
+//   transports: [
+//     new winston.transports.File({ filename: '/home/hostname/Desktop/ts_sql/api-e-commerce/nodejs.log' })
+//   ]
+// });
+
 Datasource
 .initialize()
 .then(async (connection) => {
@@ -29,10 +67,16 @@ Datasource
       // user.profile = profile
       // const savedUser = await connection.manager.save(user);
       // console.log("savedUser", savedUser);
-      
+
+
+
+// Use the logger to write logs
+logger.info('MySql connected !!!');
     })
     .catch((err) => {
       console.error('Failed to connect to MySQL', err);
+      logger.error('Failed to connect to MySQL', err);
+
     });
 // --------------------------------------------------------------------------------- AUTH APIS---------------------------------------------------------------------------------
 // app.post("/auth/register", async  (req: Request, res: Response, next: NextFunction)=>{
@@ -291,6 +335,10 @@ app.use((err:any, req:any, res:any, _next:any) => {
 });
 
 // start express server
-app.listen(3000)
+app.listen(3000,()=>{
+  console.log(`Server running on 3000`);
+  logger.info(`Server running on 3000`);
+  
+})
 
 export default app;
